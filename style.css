@@ -1,0 +1,129 @@
+body {
+    background: #CCFFFF;
+    margin: 0 auto;
+}
+
+#main {
+    padding: 10px;
+}
+
+#slider_panel {
+    margin: 0 auto;
+    text-align: center;
+    width: 600px;
+    height: 210px;
+    position: relative;
+}
+
+#butt {
+    margin: 0 auto;
+    text-align: center;
+    height: 35px;
+}
+
+button {
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: #ffffff;
+    padding: 2px 13px;
+    background: -moz-linear-gradient(top,
+        #0d79b3 0%,
+        #19ccae 50%,
+        #7868f2);
+    background: -webkit-gradient(linear, left top, left bottom,
+        from(#0d79b3),
+        color-stop(0.50, #19ccae),
+        to(#7868f2));
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+    border: 4px solid #ffffff;
+    -moz-box-shadow:
+        0px 1px 7px rgba(17, 40, 153, 0.4),
+        inset 0px 0px 2px rgba(168, 20, 168, 0.7);
+    -webkit-box-shadow:
+        0px 1px 7px rgba(17, 40, 153, 0.4),
+        inset 0px 0px 2px rgba(168, 20, 168, 0.7);
+    box-shadow:
+        0px 1px 7px rgba(17, 40, 153, 0.4),
+        inset 0px 0px 2px rgba(168, 20, 168, 0.7);
+    text-shadow:
+        0px -1px 0px rgba(0, 0, 0, 1),
+        0px 1px 0px rgba(255, 255, 255, 0.3);
+}
+
+
+#graficzny_licznik {
+    margin: 0 auto;
+    text-align: center;
+    height: 25px;
+    width: 155px;
+}
+
+.graficzny {
+    height: 21px;
+    width: 16px;
+    float: left;
+}
+
+#plansza {
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+
+}
+
+#izak {
+    width: 200px;
+    height: 200px;
+}
+
+#dog {
+    width: 200px;
+    height: 200px;
+}
+
+#slide2 {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#tr10 td {
+    color: #CCFFFF
+}
+
+.zdj_wybor {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    background-size: 200px;
+}
+
+.arrows, .zdj {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+}
+
+.puzel {
+    float: left;
+    position: absolute;
+}
+
+#prezentacja {
+
+    float: left;
+    margin: 0 auto;
+    width: 210px;
+    text-align: center;
+}
+
+th {
+    width: 100px;
+    text-align: center;
+}
