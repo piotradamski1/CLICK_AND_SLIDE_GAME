@@ -1,14 +1,6 @@
 const how_many_photos = 3;
 const board_size = 600;
-var game_difficulty;
-var img_number = 0;
-var ruch = []
-var win = []
-
-var tab = ["security", "izak", "dog", "lewo", "prawo"]
-var klik = 0;
-var m = false;
-var sliding = 0;
+let puzzle_board, win_check, img_number = 0;
 
 create_slider_layout();
 create_buttons();
@@ -95,6 +87,7 @@ function create_buttons(){
 }
 
 function create_board(tiles_qty){
+    win_check = [], puzzle_board = [];
     if(document.getElementById("plansza")){
         document.getElementById("plansza").remove();
     }
@@ -104,8 +97,7 @@ function create_board(tiles_qty){
     document.getElementById("main").appendChild(board)
     let size = board_size/tiles_qty;
     for (let i = 0; i < tiles_qty; i++) {
-        ruch[i] = []
-        win[i] = []
+        win_check[i] = []
         for (let j = 0; j < tiles_qty; j++) {
             var tile = document.createElement("div")
                 tile.id = "puzel" + i + "_" + j
@@ -114,6 +106,7 @@ function create_board(tiles_qty){
                 tile.style.height = size + "px"
                 tile.style.left = j * size + "px"
                 tile.style.top = i * size + "px"
+                tile.style.cursor = "pointer"
             if (i==0 && j==tiles_qty-1) {
                 tile.style.background = "black"
                 tile.id = "black"
@@ -123,94 +116,135 @@ function create_board(tiles_qty){
                 tile.style.backgroundPositionX = "-" + (j * size) + "px"
                 tile.style.backgroundPositionY = "-" + (i * size) + "px"
             }
-            ruch[i][j] = tile.id
-            win[i][j] = tile.id
+            win_check[i][j] = tile.id
             document.getElementById("plansza").appendChild(tile)
         }
     }
+    puzzle_board = win_check;
+    win_check =  JSON.stringify(win_check);
     mixing_puzzles(tiles_qty);
 }
 
-//start_timer();
 function _timer(){
-    let mili,sec,min,hour,liczinterval,licznik;
+    let mili,sec,min,hour,count_interval,counter;
 
     this.show = function(){
-        if(liczinterval){
-            clearInterval(liczinterval);
+        if(count_interval){
+            clearInterval(count_interval);
         }
-        if(document.getElementById("graficzny_licznik")){
-            document.getElementById("graficzny_licznik").remove();
+        if(document.getElementById("graphic_counter")){
+            document.getElementById("graphic_counter").remove();
         }
         var timer = document.createElement("div")
-        timer.id = "graficzny_licznik"
+        timer.id = "graphic_counter"
         document.getElementById("main").appendChild(timer)
-        for (var i = 0; i < 11; i++) {
-            var slot = document.createElement("div")
-            slot.className = "graficzny"
-            slot.id = "cyferka" + i
+        for (let i = 0; i < 11; i++) {
             let bg_img = (i==1 || i==4) ? "colon" : (i==7? "dot" : "c0");
-            slot.style.backgroundImage = "url('images/timer/"+bg_img+".gif')"
+            let slot = document.createElement("div")
+                slot.className = "graficzny"
+                slot.id = "cyferka" + i
+                slot.style.backgroundImage = "url('images/timer/"+bg_img+".gif')"
             if(i==1 || i==4 || i==7){
                 slot.style.width = 9 + "px";
             }
-            document.getElementById("graficzny_licznik").appendChild(slot)
+            document.getElementById("graphic_counter").appendChild(slot)
         }
     }
     this.start = function(){
         var time_start = new Date(Date.now())
-        liczinterval = setInterval(function () {
+        count_interval = setInterval(function () {
             time = new Date((new Date(Date.now())) - time_start);
             mili = time.getMilliseconds().toString().padStart(3,'0');
             sec = time.getSeconds().toString().padStart(2,'0');
             min = time.getMinutes().toString().padStart(2,'0');
             hour = (time.getHours() - 1).toString();
-            licznik = hour + ':' + min + ':' + sec + '.' + mili
-            console.log(licznik);
-            for (var i = 0; i < licznik.length; i++) {
-                if (licznik[i] != ':' && licznik[i] != '.') {
-                    document.getElementById("cyferka" + i).style.background = "url('images/timer/c" + licznik[i] + ".gif')"
+            counter = hour + ':' + min + ':' + sec + '.' + mili
+            for (var i = 0; i < counter.length; i++) {
+                if (counter[i] != ':' && counter[i] != '.') {
+                    document.getElementById("cyferka" + i).style.background = "url('images/timer/c" + counter[i] + ".gif')"
                 }
             }
         },1)
     }
     this.stop = function(){
-        clearInterval(liczinterval)
-        return licznik
+        clearInterval(count_interval)
+        return counter
     }
 }
 
 function mixing_puzzles(tiles_qty){
-    let  kierunek, oldkierunek, pion, poziom, warunek;
-    let  n=0, size=board_size/tiles_qty, x=0,  y=tiles_qty-1;
+    let  direction, old_direction, vert, horiz, check;
+    let  n=0, size=board_size/tiles_qty, black = {x: 0, y: tiles_qty-1};
     document.body.style.pointerEvents = "none";
     var mixing = setInterval(function () {
-        warunek = false;
-        while (warunek == false) {
-            kierunek = Math.round(Math.random() * 3);
-            pion = kierunek==0? -1 : (kierunek==1? 1 : 0);
-            poziom = kierunek==2? -1 : (kierunek==3? 1 : 0);
-            if (x+poziom!=tiles_qty && x+poziom!=-1 && y+pion!=tiles_qty && y+pion!=-1) {
-                if (kierunek+oldkierunek!=5 && kierunek+oldkierunek!=1) {
-                    warunek=true;
+        check = false;
+        while (check == false) {
+            direction = Math.round(Math.random() * 3);
+            vert = direction==0? -1 : (direction==1? 1 : 0);
+            horiz = direction==2? -1 : (direction==3? 1 : 0);
+            if (black.x+horiz!=tiles_qty && black.x+horiz!=-1 && black.y+vert!=tiles_qty && black.y+vert!=-1) {
+                if (direction+old_direction!=5 && direction+old_direction!=1) {
+                    check=true;
                 }
             }
         }
-        ruch[x][y] = ruch[x + poziom][y + pion]
-        ruch[x + poziom][y + pion] = "black"
-        var swap = document.getElementById(ruch[x][y])
-            swap.style.left = (y * size) + "px"
-            swap.style.top = (x * size) + "px"
-        var schwarz = document.getElementById("black")
-            schwarz.style.left = ((y + pion) * size) + "px"
-            schwarz.style.top = ((x + poziom) * size) + "px"
-        y = y + pion
-        x = x + poziom
-        oldkierunek = kierunek
+        black = tiles_swap(black, black.x+horiz, black.y+vert, size)
+        old_direction = direction
         n++;
-        if(n==tiles_qty*tiles_qty*10){
+        if(n==2){
             clearInterval(mixing);
-            document.body.style.pointerEvents = "auto";
+            gameplay(tiles_qty, {x: black.x, y: black.y});
+            timer1.start();
         }
     },20);
+}
+
+function gameplay(tiles_qty, black){
+    let clickable_tiles, size = board_size/tiles_qty;
+    document.body.style.pointerEvents = "auto";
+    document.getElementById("plansza").onclick = function(ev){
+        clickable_tiles = [];
+        if (black.x < tiles_qty - 1) {
+            clickable_tiles.push({x: black.x + 1, y: black.y})
+        }
+        if (black.x > 0) {
+            clickable_tiles.push({x: black.x - 1, y: black.y})
+        }
+        if (black.y < tiles_qty - 1) {
+            clickable_tiles.push({x: black.x, y: black.y + 1})
+        }
+        if (black.y > 0) {
+            clickable_tiles.push({x: black.x, y: black.y - 1})
+        }
+        console.log(clickable_tiles);
+        for(let i = 0; i<clickable_tiles.length; i++){
+            if(ev.target.id == puzzle_board[clickable_tiles[i].x][clickable_tiles[i].y]){
+                black = tiles_swap(black, clickable_tiles[i].x, clickable_tiles[i].y, size)
+                check_for_win()
+                break;
+            }
+        }
+    }
+}
+
+function tiles_swap(pos_black, x, y, size){
+    puzzle_board[pos_black.x][pos_black.y] = puzzle_board[x][y];
+    puzzle_board[x][y] = "black";
+    var swap = document.getElementById(puzzle_board[pos_black.x][pos_black.y])
+        swap.style.left = pos_black.y * size + "px"
+        swap.style.top = pos_black.x * size + "px"
+    var schwarz = document.getElementById("black")
+        schwarz.style.left = y * size + "px"
+        schwarz.style.top = x * size + "px"
+    pos_black.x = x
+    pos_black.y = y
+    return pos_black;
+}
+
+function check_for_win(){
+    if(JSON.stringify(puzzle_board)==win_check){
+        document.getElementById("plansza").style.pointerEvents = "none";
+        prompt("YOU WON! Your time: "+timer1.stop()+",guest");
+        ///todo cookies, tabela
+    }
 }
