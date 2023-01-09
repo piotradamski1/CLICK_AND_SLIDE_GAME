@@ -43,6 +43,7 @@ function create_slider_layout(){
 }
 
 function slider_shifting(arrow_i){
+    timer1.show();
     if (document.getElementById("plansza")) {
         document.getElementById("plansza").remove();
     }
@@ -87,6 +88,7 @@ function create_buttons(){
 }
 
 function create_board(tiles_qty){
+    timer1.show();
     win_check = [], puzzle_board = [];
     if(document.getElementById("plansza")){
         document.getElementById("plansza").remove();
@@ -174,7 +176,7 @@ function _timer(){
 
 function mixing_puzzles(tiles_qty){
     let  direction, old_direction, vert, horiz, check;
-    let  n=0, size=board_size/tiles_qty, black = {x: 0, y: tiles_qty-1};
+    let  how_many_times=tiles_qty*tiles_qty*10, size=board_size/tiles_qty, black = {x: 0, y: tiles_qty-1};
     document.body.style.pointerEvents = "none";
     var mixing = setInterval(function () {
         check = false;
@@ -190,8 +192,8 @@ function mixing_puzzles(tiles_qty){
         }
         black = tiles_swap(black, black.x+horiz, black.y+vert, size)
         old_direction = direction
-        n++;
-        if(n==2){
+        how_many_times--;
+        if(how_many_times<=0){
             clearInterval(mixing);
             gameplay(tiles_qty, {x: black.x, y: black.y});
             timer1.start();
@@ -216,7 +218,6 @@ function gameplay(tiles_qty, black){
         if (black.y > 0) {
             clickable_tiles.push({x: black.x, y: black.y - 1})
         }
-        console.log(clickable_tiles);
         for(let i = 0; i<clickable_tiles.length; i++){
             if(ev.target.id == puzzle_board[clickable_tiles[i].x][clickable_tiles[i].y]){
                 black = tiles_swap(black, clickable_tiles[i].x, clickable_tiles[i].y, size)
