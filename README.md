@@ -1,4 +1,4 @@
-# CLICK_AND_SLIDE_GAME
+# CLICK_N_SLIDE_GAME
 Click N Slide: Unscramble the pieces to make a picture. </br>
 <b> Technologie: JS, HTML, CSS</b> </br>
 ![slide1](https://user-images.githubusercontent.com/122048598/214637006-fa818b28-e38b-45f6-aee2-077392e7f28b.png)
